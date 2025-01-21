@@ -1,0 +1,7 @@
+Switch Fabric Log Started
+[INFO] Switch Fabric initialized
+[INFO] Host 00:00:00:00:00:01 connected to switch interface 0 in VLAN 10
+[INFO] Host 00:00:00:00:00:02 connected to switch interface 1 in VLAN 20
+[INFO] Host 00:00:00:00:00:03 connected to switch interface 2 in VLAN 10
+[INFO] Host 00:00:00:00:00:04 connected to switch interface 3 in VLAN 20
+[INFO] Updated MAC table: 00:00:00:00:00:FF on interface 2 and VLAN 10
