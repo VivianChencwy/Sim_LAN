@@ -27,15 +27,15 @@ A bus topology was implemented where multiple hosts are connected to a shared co
 ```python
     def send_packet(self, dst_mac, payload, bus):
         """
-        发送数据包到总线。
-        参数:
-        - dst_mac: 目标MAC地址
-        - payload: 数据包的内容
-        - bus: 总线对象
+        Send a packet to the bus.
+        Parameters:
+        - dst_mac: Destination MAC address
+        - payload: Packet content
+        - bus: Bus object
         """
-        # 创建数据包对象
+        # Create a packet object
         packet = Packet(src=self.mac, dst=dst_mac, payload=payload)
-        # 调用总线的广播功能发送数据包
+        # Call the bus's broadcast function to send the packet
         bus.broadcast(packet)
 ```
 
@@ -44,13 +44,13 @@ A bus topology was implemented where multiple hosts are connected to a shared co
 ```python
     def receive_packet(self, packet):
         """
-        接收并处理从总线发送的数据包。
-        参数:
-        - packet: 接收到的数据包对象
+        Receive and process a packet sent from the bus.
+        Parameters:
+        - packet: Received packet object
         """
-        # 检查数据包的目标地址是否匹配主机的MAC地址
+        # Check if the packet's destination address matches the host's MAC address
         if packet.dst == self.mac:
-            # 如果匹配，将数据包存储到缓冲区
+            # If it matches, store the packet in the buffer
             self.buffer.append(packet)
 ```
 
@@ -88,14 +88,14 @@ A Star topology was implemented using a central Switch that connects all hosts. 
 ```python
     def send_packet(self, dst_mac, payload, switch):
         """
-        发送数据包到交换机。
-        参数:
-        - dst_mac: 目标MAC地址
-        - payload: 数据包内容
-        - switch: 交换机对象
+        Send a packet to the switch.
+        Parameters:
+        - dst_mac: Destination MAC address
+        - payload: Packet content
+        - switch: Switch object
         """
-        packet = Packet(src=self.mac, dst=dst_mac, payload=payload)  # 创建数据包
-        switch.handle_packet(packet)  # 将数据包交给交换机处理
+        packet = Packet(src=self.mac, dst=dst_mac, payload=payload)  # Create a packet
+        switch.handle_packet(packet)  # Pass the packet to the switch for processing
 
 ```
 
@@ -104,12 +104,12 @@ A Star topology was implemented using a central Switch that connects all hosts. 
 ```python
     def receive_packet(self, packet):
         """
-        接收并处理从交换机转发来的数据包。
-        参数:
-        - packet: 数据包对象
+        Receive and process a packet forwarded from the switch.
+        Parameters:
+        - packet: Packet object
         """
-        if packet.dst == self.mac:  # 如果目标MAC地址匹配本主机
-            self.buffer.append(packet)  # 将数据包存入缓冲区
+        if packet.dst == self.mac:  # If the destination MAC address matches this host
+            self.buffer.append(packet)  # Store the packet in the buffer
 ```
 
 **Switch**
@@ -126,30 +126,30 @@ class Switch:
 
     def handle_packet(self, packet):
         """
-        处理数据包。
-        参数:
-        - packet: 数据包对象
+        Process a packet.
+        Parameters:
+        - packet: Packet object
         """
-        # 学习源MAC地址
+        # Learn the source MAC address
         if packet.src not in self.mac_table:
             self.mac_table[packet.src] = self.get_interface_by_mac(packet.src)
 
-        # 查找目标MAC地址的接口
+        # Look up the interface for the destination MAC address
         dst_interface = self.mac_table.get(packet.dst)
-        if dst_interface is not None:  # 如果找到目标接口，直接转发
+        if dst_interface is not None:  # If the destination interface is found, forward directly
             self.fabric.forward_to_interface(packet, dst_interface) 
-        else:  # 如果目标接口未知，进行泛洪
+        else:  # If the destination interface is unknown, flood the packet
             for interface, host in self.interfaces.items():
                 if host and host.interface != self.get_interface_by_mac(packet.src):
                     self.fabric.forward_to_interface(packet, interface)
 
     def get_interface_by_mac(self, mac):
         """
-        根据MAC地址获取接口编号。
-        参数:
-        - mac: MAC地址
-        返回值:
-        - 接口编号
+        Get the interface number by MAC address.
+        Parameters:
+        - mac: MAC address
+        Returns:
+        - Interface number
         """
         for interface, host in self.interfaces.items():
             if host and host.mac == mac:
