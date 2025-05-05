@@ -1,4 +1,4 @@
-# Final Project: Sim-LAN
+# Data Communications and Networking Final Project: Sim-LAN
 
 ## Abstract
 
